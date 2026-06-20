@@ -1,35 +1,41 @@
-# 🤖 Persona AI / Lumi
+# 🤖 Persona AI
 
 **A private, self-hosted personal AI assistant that runs on your own hardware.**
-Memory, voice, RAG, and tool-calling — with no user data leaving your machines.
+Memory, voice, RAG, and tool-calling — designed so no user data leaves your machines.
 
-This is the **project hub**. Persona AI spans four repositories:
+> Persona AI is its own project (distinct from [lifeOS](https://github.com/ZarbieK-9/lifeOS),
+> my life-management app). It's a real AI assistant: retrieval-augmented generation,
+> agent/tool-calling, and a mix of hosted + self-hosted models.
 
-| Repo | Role | Stack |
-|------|------|-------|
-| 🧠 **[persona-ai](https://github.com/ZarbieK-9/persona-ai)** | Backend — server + GPU laptop | Python, FastAPI, PostgreSQL + pgvector, Redis, Ollama |
-| 🌐 **[persona-ai-web](https://github.com/ZarbieK-9/persona-ai-web)** | Web client (chat) | Vite, React, TypeScript |
-| 📱 **[persona-ai-android](https://github.com/ZarbieK-9/persona-ai-android)** | Native Android client | Kotlin (chat, voice, on-device wake-word) |
-| ✨ **[persona-ai-marketing](https://github.com/ZarbieK-9/persona-ai-marketing)** | Marketing site | Astro, React, Framer Motion, GSAP → Cloudflare Pages |
+## Repositories
+
+| Repo | Role | Stack | |
+|------|------|-------|---|
+| ✨ **[persona-ai-marketing](https://github.com/ZarbieK-9/persona-ai-marketing)** | Marketing site → [live](https://lumi-marketing.pages.dev) | Astro, React, Framer Motion, GSAP → Cloudflare Pages | 🌐 public |
+| 🌐 **[persona-ai-web](https://github.com/ZarbieK-9/persona-ai-web)** | Web chat client | Vite, React, TypeScript | 🌐 public |
+| 🧠 persona-ai | Backend — server + GPU laptop | Python, FastAPI, Postgres + pgvector, Redis, Ollama | 🔒 private |
+| 📱 persona-ai-android | Native Android client | Kotlin — chat, voice, on-device wake-word | 🔒 private |
+
+*(The backend and Android client are private; the web client and marketing site are open.)*
 
 ## Architecture
 
 ```
-   🌐 web   📱 android        ✨ marketing site (Cloudflare Pages)
-      │         │
-      └────┬────┘  HTTPS over a private tunnel
-           ▼
+   🌐 web        ✨ marketing (Cloudflare Pages)
+      │
+      │  HTTPS over a private tunnel (Tailscale)
+      ▼
    ┌─────────────────────────────────────────────┐
    │  SERVER (always-on)                          │
    │  FastAPI · Postgres + pgvector (RAG) · Redis  │
-   │  memory · files · audit log · tool-calling    │
+   │  memory · file upload/retrieval · audit log   │
+   │  tool-calling / agent orchestration           │
    └───────────────────┬─────────────────────────┘
                        │  Tailnet
                        ▼
    ┌─────────────────────────────────────────────┐
    │  LAPTOP (on-demand GPU)                       │
    │  Ollama — Qwen 2.5 / 2.5-VL / nomic-embed     │
-   │  + agent orchestrator                         │
    └─────────────────────────────────────────────┘
 ```
 
@@ -40,7 +46,6 @@ This is the **project hub**. Persona AI spans four repositories:
 - **Privacy-first**: user-visible, deletable memory; nothing leaves your hardware by default.
 
 Grouped under the **[`persona-ai`](https://github.com/ZarbieK-9?tab=repositories&q=topic%3Apersona-ai)** topic.
-Live marketing site: **[lumi-marketing.pages.dev](https://lumi-marketing.pages.dev)**.
 
 ---
 *Built by [Bishwas Khanal](https://bishwaskhanal.com.np).*
